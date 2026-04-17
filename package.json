@@ -1,0 +1,27 @@
+{
+  "name": "tinygl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build.js",
+  "scripts": {
+    "build": "nodemon --watch src build.js",
+    "server": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pawelworzala86/tinyGL.git"
+  },
+  "keywords": [],
+  "author": "Paweł Worzała",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/pawelworzala86/tinyGL/issues"
+  },
+  "homepage": "https://github.com/pawelworzala86/tinyGL#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "terser": "^5.46.1"
+  }
+}
