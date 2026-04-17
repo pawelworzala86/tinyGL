@@ -1,7 +1,7 @@
-import { Geometry } from "./geometry.js"
-import { Buffer } from "./buffer.js"
-import { Shader } from "./shader.js"
-import { Controls } from "./controls.js"
+import { Geometry } from './geometry.js'
+import { Buffer } from './buffer.js'
+import { Shader } from './shader.js'
+import { Controls } from './controls.js'
 
 export class Engine{
     constructor(){
