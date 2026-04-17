@@ -1,6 +1,7 @@
 import { Geometry } from "./geometry.js"
 import { Buffer } from "./buffer.js"
 import { Shader } from "./shader.js"
+import { Controls } from "./controls.js"
 
 export class Engine{
     constructor(){
@@ -95,7 +96,7 @@ export class Engine{
 
         /*================= Mouse events ======================*/
 
-        var AMORTIZATION = 0.95;
+        /*var AMORTIZATION = 0.95;
         var drag = false;
         var old_x, old_y;
         var dX = 0, dY = 0;
@@ -124,7 +125,8 @@ export class Engine{
         canvas.addEventListener("mousedown", mouseDown, false);
         canvas.addEventListener("mouseup", mouseUp, false);
         canvas.addEventListener("mouseout", mouseUp, false);
-        canvas.addEventListener("mousemove", mouseMove, false);
+        canvas.addEventListener("mousemove", mouseMove, false);*/
+        const controls = new Controls(gl,canvas)
 
         /*=========================rotation================*/
 
@@ -158,16 +160,16 @@ export class Engine{
 
         /*=================== Drawing =================== */
 
-        var THETA = 0,
-        PHI = 0;
         var time_old = 0;
 
         var animate = function(time) {
         var dt = time-time_old;
 
-        if (!drag) {
-            dX *= AMORTIZATION, dY*=AMORTIZATION;
-            THETA+=dX, PHI+=dY;
+        if (!controls.drag) {
+            controls.dX *= controls.AMORTIZATION
+            controls.dY*=controls.AMORTIZATION
+            controls.THETA+=controls.dX
+            controls.PHI+=controls.dY
         }
 
         //set model matrix to I4
@@ -184,8 +186,8 @@ export class Engine{
         mo_matrix[12] = 0, mo_matrix[13] = 0, mo_matrix[14] = 0,
         mo_matrix[15] = 1;
 
-        rotateY(mo_matrix, THETA);
-        rotateX(mo_matrix, PHI);
+        rotateY(mo_matrix, controls.THETA)
+        rotateX(mo_matrix, controls.PHI)
 
         time_old = time; 
         gl.enable(gl.DEPTH_TEST);
