@@ -1,11 +1,13 @@
 import { Geometry } from "./geometry.js"
+import { Buffer } from "./buffer.js"
+import { Shader } from "./shader.js"
 
 export class Engine{
     constructor(){
         this.canvas = document.getElementById('canvas')
         this.gl = canvas.getContext('webgl2')
     }
-    render(){
+    async render(){
         const canvas = this.canvas
         const gl = this.gl
 
@@ -15,7 +17,7 @@ export class Engine{
 
 
         // Create and store data into vertex buffer
-        var vertex_buffer = gl.createBuffer ();
+        /*var vertex_buffer = gl.createBuffer ();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(geometry.vertices), gl.STATIC_DRAW);
 
@@ -27,11 +29,17 @@ export class Engine{
         // Create and store data into index buffer
         var index_buffer = gl.createBuffer ();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(geometry.indices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(geometry.indices), gl.STATIC_DRAW);*/
+
+        const vertex_buffer = Buffer.create(gl,new Float32Array(geometry.vertices),gl.ARRAY_BUFFER);
+        const color_buffer = Buffer.create(gl,new Float32Array(geometry.colors),gl.ARRAY_BUFFER);
+        const index_buffer = Buffer.create(gl,new Uint16Array(geometry.indices),gl.ELEMENT_ARRAY_BUFFER);
+
+
 
         /*=================== SHADERS =================== */
 
-        var vertCode = 'attribute vec3 position;'+
+        /*var vertCode = 'attribute vec3 position;'+
         'uniform mat4 Pmatrix;'+
         'uniform mat4 Vmatrix;'+
         'uniform mat4 Mmatrix;'+
@@ -56,26 +64,16 @@ export class Engine{
         gl.shaderSource(fragShader, fragCode);
         gl.compileShader(fragShader);
 
-        var shaderprogram = gl.createProgram();
-        gl.attachShader(shaderprogram, vertShader);
-        gl.attachShader(shaderprogram, fragShader);
-        gl.linkProgram(shaderprogram);
+        var shader.program = gl.createProgram();
+        gl.attachShader(shader.program, vertShader);
+        gl.attachShader(shader.program, fragShader);
+        gl.linkProgram(shader.program);*/
 
-        /*======== Associating attributes to vertex shader =====*/
-        var _Pmatrix = gl.getUniformLocation(shaderprogram, "Pmatrix");
-        var _Vmatrix = gl.getUniformLocation(shaderprogram, "Vmatrix");
-        var _Mmatrix = gl.getUniformLocation(shaderprogram, "Mmatrix");
+        const shader = await Shader.create(gl)
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        var _position = gl.getAttribLocation(shaderprogram, "position");
-        gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
-        gl.enableVertexAttribArray(_position);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
-        var _color = gl.getAttribLocation(shaderprogram, "color");
-        gl.vertexAttribPointer(_color, 3, gl.FLOAT, false,0,0) ;
-        gl.enableVertexAttribArray(_color);
-        gl.useProgram(shaderprogram);
+
+        
 
         /*==================== MATRIX ====================== */
 
@@ -198,6 +196,23 @@ export class Engine{
         gl.clearDepth(1.0);
         gl.viewport(0.0, 0.0, canvas.width, canvas.height);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+        /*======== Associating attributes to vertex shader =====*/
+        var _Pmatrix = gl.getUniformLocation(shader.program, "Pmatrix");
+        var _Vmatrix = gl.getUniformLocation(shader.program, "Vmatrix");
+        var _Mmatrix = gl.getUniformLocation(shader.program, "Mmatrix");
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        var _position = gl.getAttribLocation(shader.program, "position");
+        gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
+        gl.enableVertexAttribArray(_position);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
+        var _color = gl.getAttribLocation(shader.program, "color");
+        gl.vertexAttribPointer(_color, 3, gl.FLOAT, false,0,0) ;
+        gl.enableVertexAttribArray(_color);
+        gl.useProgram(shader.program);
 
         gl.uniformMatrix4fv(_Pmatrix, false, proj_matrix);
         gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
