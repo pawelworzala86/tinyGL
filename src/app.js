@@ -1,3 +1,3 @@
-import { TEST } from './res.js'
+import { Engine } from './webgl/engine.js'
 
-console.log(TEST)
+Engine()
