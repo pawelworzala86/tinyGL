@@ -1,3 +1,5 @@
 import { Engine } from './webgl/engine.js'
 
-Engine()
+const engine = new Engine
+
+engine.render()
