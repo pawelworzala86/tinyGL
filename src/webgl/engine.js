@@ -3,6 +3,10 @@ import { Buffer } from './buffer.js'
 import { Shader } from './shader.js'
 import { Controls } from './controls.js'
 
+
+const { mat4 } = glMatrix
+
+
 export class Engine{
     constructor(){
         this.canvas = document.getElementById('canvas')
@@ -78,7 +82,7 @@ export class Engine{
 
         /*==================== MATRIX ====================== */
 
-        function get_projection(angle, a, zMin, zMax) {
+        /*function get_projection(angle, a, zMin, zMax) {
         var ang = Math.tan((angle*.5)*Math.PI/180);//angle*.5
         return [
             0.5/ang, 0 , 0, 0,
@@ -86,11 +90,13 @@ export class Engine{
             0, 0, -(zMax+zMin)/(zMax-zMin), -1,
             0, 0, (-2*zMax*zMin)/(zMax-zMin), 0 
             ];
-        }
+        }*/
 
-        var proj_matrix = get_projection(40, canvas.width/canvas.height, 1, 100);
-        var mo_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
-        var view_matrix = [ 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 ];
+        var proj_matrix = mat4.create()
+        mat4.perspectiveNO(proj_matrix, 40, canvas.width/canvas.height, 1, 100)
+        //get_projection(40, canvas.width/canvas.height, 1, 100);
+        var mo_matrix = mat4.create()
+        var view_matrix = mat4.create()
 
         view_matrix[14] = view_matrix[14]-6;
 
@@ -130,7 +136,7 @@ export class Engine{
 
         /*=========================rotation================*/
 
-        function rotateX(m, angle) {
+        /*function rotateX(m, angle) {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
         var mv1 = m[1], mv5 = m[5], mv9 = m[9];
@@ -156,7 +162,7 @@ export class Engine{
         m[2] = c*m[2]-s*mv0;
         m[6] = c*m[6]-s*mv4;
         m[10] = c*m[10]-s*mv8;
-        }
+        }*/
 
         /*=================== Drawing =================== */
 
@@ -186,8 +192,10 @@ export class Engine{
         mo_matrix[12] = 0, mo_matrix[13] = 0, mo_matrix[14] = 0,
         mo_matrix[15] = 1;
 
-        rotateY(mo_matrix, controls.THETA)
-        rotateX(mo_matrix, controls.PHI)
+        //rotateY(mo_matrix, controls.THETA)
+        mat4.rotateY(mo_matrix,mo_matrix,controls.THETA)
+        //rotateX(mo_matrix, controls.PHI)
+        mat4.rotateX(mo_matrix,mo_matrix,controls.PHI)
 
         time_old = time; 
         gl.enable(gl.DEPTH_TEST);
