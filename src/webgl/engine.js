@@ -93,12 +93,15 @@ export class Engine{
         }*/
 
         var proj_matrix = mat4.create()
-        mat4.perspectiveNO(proj_matrix, 40, canvas.width/canvas.height, 1, 100)
+        mat4.perspectiveNO(proj_matrix, 45*Math.PI/180, canvas.width/canvas.height, 0.01, 1000)
         //get_projection(40, canvas.width/canvas.height, 1, 100);
-        var mo_matrix = mat4.create()
-        var view_matrix = mat4.create()
 
-        view_matrix[14] = view_matrix[14]-6;
+        var mo_matrix = mat4.create()
+
+        var view_matrix = mat4.create()
+        mat4.translate(view_matrix,view_matrix,[0,0,-6])
+
+        //view_matrix[14] = view_matrix[14]-6;
 
         /*================= Mouse events ======================*/
 
@@ -180,7 +183,8 @@ export class Engine{
 
         //set model matrix to I4
 
-        mo_matrix[0] = 1, mo_matrix[1] = 0, mo_matrix[2] = 0,
+        mat4.identity(mo_matrix)
+        /*mo_matrix[0] = 1, mo_matrix[1] = 0, mo_matrix[2] = 0,
         mo_matrix[3] = 0,
 
         mo_matrix[4] = 0, mo_matrix[5] = 1, mo_matrix[6] = 0,
@@ -190,7 +194,7 @@ export class Engine{
         mo_matrix[11] = 0,
 
         mo_matrix[12] = 0, mo_matrix[13] = 0, mo_matrix[14] = 0,
-        mo_matrix[15] = 1;
+        mo_matrix[15] = 1;*/
 
         //rotateY(mo_matrix, controls.THETA)
         mat4.rotateY(mo_matrix,mo_matrix,controls.THETA)
