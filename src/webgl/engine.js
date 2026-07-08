@@ -25,8 +25,6 @@ export class Engine{
         mat4.perspectiveNO(proj_matrix, 45*Math.PI/180, canvas.width/canvas.height, 0.01, 1000)
         //get_projection(40, canvas.width/canvas.height, 1, 100);
 
-        var mo_matrix = mat4.create()
-
         var view_matrix = mat4.create()
         mat4.translate(view_matrix,view_matrix,[0,0,-6])
 
@@ -47,10 +45,9 @@ export class Engine{
 
         //set model matrix to I4
 
-        mat4.identity(mo_matrix)
-        
-        mat4.rotateY(mo_matrix,mo_matrix,controls.THETA)
-        mat4.rotateX(mo_matrix,mo_matrix,controls.PHI)
+        mat4.identity(model.mo_matrix)
+        mat4.rotateY(model.mo_matrix,model.mo_matrix,controls.THETA)
+        mat4.rotateX(model.mo_matrix,model.mo_matrix,controls.PHI)
 
         time_old = time; 
         gl.enable(gl.DEPTH_TEST);
@@ -63,7 +60,7 @@ export class Engine{
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-        model.render(proj_matrix,view_matrix,mo_matrix)
+        model.render(proj_matrix,view_matrix)
 
         window.requestAnimationFrame(animate);
         }

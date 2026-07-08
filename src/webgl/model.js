@@ -1,11 +1,14 @@
 import { Mesh } from './mesh.js'
 import { Shader } from './shader.js'
-import { get } from "./../common.js"
+import { get } from './../common.js'
+
+const { mat4 } = glMatrix
 
 export class Model{
     constructor(gl){
-        this.gl = gl;
-        this.meshes = [];
+        this.gl = gl
+        this.meshes = []
+        this.mo_matrix = mat4.create()
     }
     static async create(gl){
         const model = new Model(gl)
@@ -18,11 +21,12 @@ export class Model{
 
         model.meshes.push(mesh)
 
+
         return model
     }
-    render(proj_matrix,view_matrix,mo_matrix){
+    render(proj_matrix,view_matrix){
         for(const mesh of this.meshes){
-            mesh.render(proj_matrix,view_matrix,mo_matrix)
+            mesh.render(proj_matrix,view_matrix,this.mo_matrix)
         }
     }
 }
