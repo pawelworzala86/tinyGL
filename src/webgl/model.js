@@ -1,5 +1,6 @@
 import { Mesh } from './mesh.js'
 import { Shader } from './shader.js'
+import { get } from "./../common.js"
 
 export class Model{
     constructor(gl){
@@ -11,7 +12,9 @@ export class Model{
 
         model.shader = await Shader.create(gl)
 
-        const mesh = await Mesh.create(gl,model.shader)
+        const modelData = await get('/models/cube.json','json')
+
+        const mesh = await Mesh.create(gl,model.shader,modelData)
 
         model.meshes.push(mesh)
 

@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.resolve('./dist')));
 app.use('/sources',express.static(path.resolve('./src')));
 app.use('/shaders',express.static(path.resolve('./shaders')));
+app.use('/models',express.static(path.resolve('./models')));
 
 // Fallback dla SPA lub stron bez routera
 app.get(/\*/, (req, res) => {

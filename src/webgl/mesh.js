@@ -1,5 +1,4 @@
 import { Shader } from './shader.js'
-import { Geometry } from './geometry.js'
 import { Buffer } from './buffer.js'
 
 export class Mesh{
@@ -7,10 +6,10 @@ export class Mesh{
         this.gl = gl;
         this.shader = shader;
     }
-    static async create(gl,shader){
+    static async create(gl,shader,modelData){
         const mesh  = new Mesh(gl,shader)
 
-        mesh.geometry = Geometry.getCube()
+        mesh.geometry = modelData
 
         mesh.vertex_buffer = Buffer.create(gl,new Float32Array(mesh.geometry.vertices),gl.ARRAY_BUFFER);
         mesh.color_buffer = Buffer.create(gl,new Float32Array(mesh.geometry.colors),gl.ARRAY_BUFFER);
