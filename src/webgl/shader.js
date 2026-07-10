@@ -5,17 +5,18 @@ export class Shader{
         this.gl = gl
         this.program = program
     }
+    static createShader(gl,type,code){
+        const shader = gl.createShader(type)
+        gl.shaderSource(shader, code)
+        gl.compileShader(shader)
+        return shader
+    }
     static async create(gl){
         const vertCode = await get('./shaders/default.vert')
         const fragCode = await get('./shaders/default.frag')
 
-        const vertShader = gl.createShader(gl.VERTEX_SHADER)
-        gl.shaderSource(vertShader, vertCode)
-        gl.compileShader(vertShader)
-
-        const fragShader = gl.createShader(gl.FRAGMENT_SHADER)
-        gl.shaderSource(fragShader, fragCode)
-        gl.compileShader(fragShader)
+        const vertShader = Shader.createShader(gl,gl.VERTEX_SHADER, vertCode)
+        const fragShader = Shader.createShader(gl,gl.FRAGMENT_SHADER, fragCode)
 
         const program = gl.createProgram()
         gl.attachShader(program, vertShader)
