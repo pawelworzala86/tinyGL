@@ -16,12 +16,17 @@ export class Engine{
 
         
 
+        const models = []
 
-        const model = await Model.create(gl)
-        model.rotateXm = Math.random()*0.0005
-        model.rotateYm = Math.random()*0.0005
-        model.rotateX = Math.random()
-        model.rotateY = Math.random()
+        for(let i=0;i<25;i++){
+            const model = await Model.create(gl)
+            model.rotateXm = Math.random()*0.0005
+            model.rotateYm = Math.random()*0.0005
+            model.rotateX = Math.random()
+            model.rotateY = Math.random()
+            model.position = [(Math.random()-0.5)*30,(Math.random()-0.5)*30,(Math.random()-0.5)*30,]
+            models.push(model)
+        }
         
         
 
@@ -31,7 +36,7 @@ export class Engine{
         //get_projection(40, canvas.width/canvas.height, 1, 100);
 
         var view_matrix = mat4.create()
-        mat4.translate(view_matrix,view_matrix,[0,0,-6])
+        mat4.translate(view_matrix,view_matrix,[0,0,-50])
 
         
         //const controls = new Controls(gl,canvas)
@@ -57,11 +62,7 @@ export class Engine{
 
             time_old = time; 
 
-            model.rotateX += model.rotateXm*dt
-            model.rotateY += model.rotateYm*dt
-            mat4.identity(model.mo_matrix)
-            mat4.rotateY(model.mo_matrix,model.mo_matrix,model.rotateX)
-            mat4.rotateX(model.mo_matrix,model.mo_matrix,model.rotateY)
+            
 
 
             gl.enable(gl.DEPTH_TEST);
@@ -74,7 +75,16 @@ export class Engine{
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-            model.render(proj_matrix,view_matrix)
+            for(const model of models){
+                model.rotateX += model.rotateXm*dt
+                model.rotateY += model.rotateYm*dt
+                mat4.identity(model.mo_matrix)
+                mat4.translate(model.mo_matrix, model.mo_matrix, model.position)
+                mat4.rotateY(model.mo_matrix,model.mo_matrix,model.rotateX)
+                mat4.rotateX(model.mo_matrix,model.mo_matrix,model.rotateY)
+
+                model.render(proj_matrix,view_matrix)
+            }
 
             window.requestAnimationFrame(animate);
         }
