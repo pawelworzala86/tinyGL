@@ -1,4 +1,4 @@
-import { Controls } from './controls.js'
+//import { Controls } from './controls.js'
 import { Model } from './model.js'
 
 const { mat4 } = glMatrix
@@ -18,6 +18,11 @@ export class Engine{
 
 
         const model = await Model.create(gl)
+        model.rotateXm = Math.random()*0.0005
+        model.rotateYm = Math.random()*0.0005
+        model.rotateX = Math.random()
+        model.rotateY = Math.random()
+        
         
 
 
@@ -29,40 +34,49 @@ export class Engine{
         mat4.translate(view_matrix,view_matrix,[0,0,-6])
 
         
-        const controls = new Controls(gl,canvas)
+        //const controls = new Controls(gl,canvas)
 
         var time_old = 0;
 
         var animate = function(time) {
-        var dt = time-time_old;
+            var dt = time-time_old;
 
-        if (!controls.drag) {
-            controls.dX *= controls.AMORTIZATION
-            controls.dY*=controls.AMORTIZATION
-            controls.THETA+=controls.dX
-            controls.PHI+=controls.dY
-        }
+            /*if (!controls.drag) {
+                controls.dX *= controls.AMORTIZATION
+                controls.dY*=controls.AMORTIZATION
+                controls.THETA+=controls.dX
+                controls.PHI+=controls.dY
+            }*/
 
-        //set model matrix to I4
+            //set model matrix to I4
 
-        mat4.identity(model.mo_matrix)
-        mat4.rotateY(model.mo_matrix,model.mo_matrix,controls.THETA)
-        mat4.rotateX(model.mo_matrix,model.mo_matrix,controls.PHI)
-
-        time_old = time; 
-        gl.enable(gl.DEPTH_TEST);
-
-        // gl.depthFunc(gl.LEQUAL);
-
-        gl.clearColor(0.5, 0.5, 0.5, 0.9);
-        gl.clearDepth(1.0);
-        gl.viewport(0.0, 0.0, canvas.width, canvas.height);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            //mat4.identity(model.mo_matrix)
+            //mat4.rotateY(model.mo_matrix,model.mo_matrix,controls.THETA)
+            //mat4.rotateX(model.mo_matrix,model.mo_matrix,controls.PHI)
 
 
-        model.render(proj_matrix,view_matrix)
+            time_old = time; 
 
-        window.requestAnimationFrame(animate);
+            model.rotateX += model.rotateXm*dt
+            model.rotateY += model.rotateYm*dt
+            mat4.identity(model.mo_matrix)
+            mat4.rotateY(model.mo_matrix,model.mo_matrix,model.rotateX)
+            mat4.rotateX(model.mo_matrix,model.mo_matrix,model.rotateY)
+
+
+            gl.enable(gl.DEPTH_TEST);
+
+            // gl.depthFunc(gl.LEQUAL);
+
+            gl.clearColor(0.5, 0.5, 0.5, 0.9);
+            gl.clearDepth(1.0);
+            gl.viewport(0.0, 0.0, canvas.width, canvas.height);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+            model.render(proj_matrix,view_matrix)
+
+            window.requestAnimationFrame(animate);
         }
         animate(0);
     }
