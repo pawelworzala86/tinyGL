@@ -6,8 +6,11 @@ const { mat4 } = glMatrix
 
 export class Engine{
     constructor(){
-        this.canvas = document.getElementById('canvas')
-        this.gl = canvas.getContext('webgl2')
+        this.canvas = document.createElement('canvas')
+        this.canvas.width = window.innerWidth / 2.0
+        this.canvas.height = window.innerHeight / 2.0
+        this.gl = this.canvas.getContext('webgl2')
+        document.body.append(this.canvas)
     }
     async render(){
         const canvas = this.canvas
