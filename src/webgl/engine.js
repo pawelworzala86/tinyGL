@@ -79,7 +79,7 @@ export class Engine{
             const globalUniforms = {
                 perspective: perspectiveMatrix,
                 camera: cameraMatrix,
-                lightDir: new Float32Array([0.3, -0.5, 2.2]),
+                lightDir: new Float32Array([0.3, -0.5, -2.2]),
             }
 
 
