@@ -11,6 +11,8 @@ export class Uniform{
 
             if(uniform.length==16){
                 gl.uniformMatrix4fv(uniformLocation, false, uniform)
+            }else if(uniform.length==3){
+                gl.uniform3fv(uniformLocation, uniform)
             }
         }
     }
