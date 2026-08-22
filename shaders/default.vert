@@ -1,14 +1,14 @@
 attribute vec3 position;
 
-uniform mat4 Pmatrix;
-uniform mat4 Vmatrix;
-uniform mat4 Mmatrix;
+uniform mat4 perspective;
+uniform mat4 camera;
+uniform mat4 model;
 
 attribute vec3 color;
 
 varying vec3 vColor;
 
 void main(void) {
-    gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);
+    gl_Position = perspective*camera*model*vec4(position, 1.);
     vColor = color;
 }
