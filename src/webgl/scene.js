@@ -6,12 +6,12 @@ export class Scene{
         this.childrens = []
         this.matrix = mat4.create()
     }
-    render(perspectiveMatrix,cameraMatrix,matrix=mat4.create()){
+    render(uniforms,matrix=mat4.create()){
         const finalMatrix = mat4.create();
         mat4.multiply(finalMatrix, matrix, this.matrix);
 
         for(const child of this.childrens){
-            child.render(perspectiveMatrix,cameraMatrix,finalMatrix)
+            child.render(uniforms,finalMatrix)
         }
     }
 }

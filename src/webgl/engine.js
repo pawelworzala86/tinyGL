@@ -74,12 +74,19 @@ export class Engine{
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
+
+            const globalUniforms = {
+                perspective: perspectiveMatrix,
+                camera: cameraMatrix,
+            }
+
+
             for(const model of models){
                 if(model.animate){
                     model.animate(delta)
                 }
 
-                model.render(perspectiveMatrix,cameraMatrix)
+                model.render(globalUniforms)
             }
 
             window.requestAnimationFrame(animate);

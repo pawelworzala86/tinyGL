@@ -1,12 +1,15 @@
-import { Buffer } from './buffer.js'
+import Buffer from './buffer.js'
 import Scene from './scene.js'
+import Uniform from './uniform.js'
 
 const { mat4 } = glMatrix
 
 export class Mesh extends Scene{
     static async create(gl,shader,modelData){
         const mesh  = new Mesh(gl,shader)
-        mesh.shader = shader;
+        mesh.shader = shader
+
+        mesh.uniformSetter = new Uniform(gl)
 
         mesh.geometry = modelData
 
@@ -24,12 +27,14 @@ export class Mesh extends Scene{
         gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
         gl.enableVertexAttribArray(_position);
     }
-    render(perspectiveMatrix,cameraMatrix,matrix){
-        const {gl} = this
+    render(uniforms,matrix){
+        const {gl,shader} = this
+
+        
  
-        var uPerspective = gl.getUniformLocation(this.shader.program, "perspective");
-        var uCamera = gl.getUniformLocation(this.shader.program, "camera");
-        var uModel = gl.getUniformLocation(this.shader.program, "model");
+        //var uPerspective = gl.getUniformLocation(this.shader.program, "perspective");
+        //var uCamera = gl.getUniformLocation(this.shader.program, "camera");
+        //var uModel = gl.getUniformLocation(this.shader.program, "model");
 
         this.setAttribute(this.buffers.vertex,'position')
         this.setAttribute(this.buffers.color,'color')
@@ -41,10 +46,15 @@ export class Mesh extends Scene{
         mat4.multiply(finalMatrix, matrix, this.matrix);
 
 
+        const meshUniforms = Object.assign(uniforms,{
+            model: finalMatrix,
+        })
 
-        gl.uniformMatrix4fv(uPerspective, false, perspectiveMatrix);
-        gl.uniformMatrix4fv(uCamera, false, cameraMatrix);
-        gl.uniformMatrix4fv(uModel, false, finalMatrix);
+        //gl.uniformMatrix4fv(uPerspective, false, perspectiveMatrix);
+        //gl.uniformMatrix4fv(uCamera, false, cameraMatrix);
+        //gl.uniformMatrix4fv(uModel, false, finalMatrix);
+
+        this.uniformSetter.set(shader,meshUniforms)
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.index);
         gl.drawElements(gl.TRIANGLES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);

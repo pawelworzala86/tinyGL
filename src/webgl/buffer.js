@@ -6,3 +6,5 @@ export class Buffer{
         return buffer
     }
 }
+
+export default Buffer
