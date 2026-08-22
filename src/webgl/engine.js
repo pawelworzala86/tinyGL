@@ -22,9 +22,10 @@ export class Engine{
 
         const models = []
 
-        for(let i=0;i<25;i++){
-            const model = await Model.create(gl)
-            model.rotateXm = Math.random()*0.0005
+        //for(let i=0;i<25;i++){
+            const model = await Model.create(gl,'box/scene.gltf')
+            
+            /*model.rotateXm = Math.random()*0.0005
             model.rotateYm = Math.random()*0.0005
             model.rotateX = (Math.random()-0.5)*30
             model.rotateY = (Math.random()-0.5)*30
@@ -37,10 +38,10 @@ export class Engine{
                 mat4.translate(model.matrix, model.matrix, model.position)
                 mat4.rotateY(model.matrix,model.matrix,model.rotateX)
                 mat4.rotateX(model.matrix,model.matrix,model.rotateY)
-            }
+            }*/
 
             models.push(model)
-        }
+        //}
         
         
 

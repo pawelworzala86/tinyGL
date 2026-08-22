@@ -5,34 +5,40 @@ import Uniform from './uniform.js'
 const { mat4 } = glMatrix
 
 export class Mesh extends Scene{
-    static async create(gl,shader,modelData){
+    static async create(gl,shader,geometry){
         const mesh  = new Mesh(gl,shader)
         mesh.shader = shader
 
         mesh.uniformSetter = new Uniform(gl)
 
-        mesh.geometry = modelData
+        mesh.geometry = geometry
 
         mesh.buffers = {}
-        mesh.buffers.vertex = Buffer.create(gl,new Float32Array(mesh.geometry.vertices),gl.ARRAY_BUFFER);
-        mesh.buffers.color = Buffer.create(gl,new Float32Array(mesh.geometry.colors),gl.ARRAY_BUFFER);
-        mesh.buffers.index = Buffer.create(gl,new Uint16Array(mesh.geometry.indices),gl.ELEMENT_ARRAY_BUFFER);
+        mesh.buffers.position = Buffer.create(gl,geometry.position.data.data,gl.ARRAY_BUFFER);
+        mesh.buffers.normal = Buffer.create(gl,geometry.normal.data.data,gl.ARRAY_BUFFER);
+        mesh.buffers.tangent = Buffer.create(gl,geometry.tangent.data.data,gl.ARRAY_BUFFER);
+        mesh.buffers.texcoord_0 = Buffer.create(gl,geometry.texcoord_0.data.data,gl.ARRAY_BUFFER);
+        mesh.buffers.indices = Buffer.create(gl,geometry.indices.data.data,gl.ELEMENT_ARRAY_BUFFER);
 
         return mesh
     }
-    setAttribute(buffer,name){
+    setAttribute(buffer,name,size){
         const {gl} = this
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        var _position = gl.getAttribLocation(this.shader.program, name);
-        gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
-        gl.enableVertexAttribArray(_position);
+        const _position = gl.getAttribLocation(this.shader.program, name);
+        if(_position>-1){
+            gl.vertexAttribPointer(_position, size, gl.FLOAT, false,0,0);
+            gl.enableVertexAttribArray(_position);
+        }
     }
     render(uniforms,matrix){
         const {gl,shader} = this
 
 
-        this.setAttribute(this.buffers.vertex,'position')
-        this.setAttribute(this.buffers.color,'color')
+        this.setAttribute(this.buffers.position,'position',3)
+        this.setAttribute(this.buffers.normal,'normal', 4)
+        this.setAttribute(this.buffers.tangent,'tangent', 3)
+        this.setAttribute(this.buffers.texcoord_0,'texcoord_0',2)
 
         gl.useProgram(this.shader.program);
 
@@ -47,8 +53,8 @@ export class Mesh extends Scene{
 
         this.uniformSetter.set(shader,meshUniforms)
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.index);
-        gl.drawElements(gl.TRIANGLES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indices);
+        gl.drawElements(gl.TRIANGLES, this.geometry.indices.data.data.length, gl.UNSIGNED_SHORT, 0);
     }
 }
 

@@ -9,6 +9,10 @@ export class Shader{
         const shader = gl.createShader(type)
         gl.shaderSource(shader, code)
         gl.compileShader(shader)
+        if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)){
+            console.error(gl.getShaderInfoLog(shader));
+            throw new Error("Shader compile error");
+        }
         return shader
     }
     static async create(gl){
