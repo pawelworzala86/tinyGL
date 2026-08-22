@@ -27,3 +27,5 @@ export class Shader{
         return shader
     }
 }
+
+export default Shader

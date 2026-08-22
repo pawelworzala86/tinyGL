@@ -4,11 +4,6 @@ import Scene from './scene.js'
 const { mat4 } = glMatrix
 
 export class Mesh extends Scene{
-    /*constructor(gl,shader){
-        this.gl = gl;
-        this.shader = shader;
-        this.meshMatrix = mat4.create()
-    }*/
     static async create(gl,shader,modelData){
         const mesh  = new Mesh(gl,shader)
         mesh.shader = shader;
@@ -54,3 +49,5 @@ export class Mesh extends Scene{
         gl.drawElements(gl.TRIANGLES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 }
+
+export default Mesh

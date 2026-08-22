@@ -7,8 +7,9 @@ const { mat4 } = glMatrix
 export class Engine{
     constructor(){
         this.canvas = document.createElement('canvas')
-        this.canvas.width = window.innerWidth / 2.0
-        this.canvas.height = window.innerHeight / 2.0
+        const minimizeFactor = 1.75
+        this.canvas.width = window.innerWidth / minimizeFactor
+        this.canvas.height = window.innerHeight / minimizeFactor
         this.gl = this.canvas.getContext('webgl2')
         document.body.append(this.canvas)
     }
