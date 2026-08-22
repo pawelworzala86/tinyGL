@@ -30,11 +30,6 @@ export class Mesh extends Scene{
     render(uniforms,matrix){
         const {gl,shader} = this
 
-        
- 
-        //var uPerspective = gl.getUniformLocation(this.shader.program, "perspective");
-        //var uCamera = gl.getUniformLocation(this.shader.program, "camera");
-        //var uModel = gl.getUniformLocation(this.shader.program, "model");
 
         this.setAttribute(this.buffers.vertex,'position')
         this.setAttribute(this.buffers.color,'color')
@@ -49,10 +44,6 @@ export class Mesh extends Scene{
         const meshUniforms = Object.assign(uniforms,{
             model: finalMatrix,
         })
-
-        //gl.uniformMatrix4fv(uPerspective, false, perspectiveMatrix);
-        //gl.uniformMatrix4fv(uCamera, false, cameraMatrix);
-        //gl.uniformMatrix4fv(uModel, false, finalMatrix);
 
         this.uniformSetter.set(shader,meshUniforms)
 

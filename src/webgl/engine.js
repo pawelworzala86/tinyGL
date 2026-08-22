@@ -1,5 +1,5 @@
 //import { Controls } from './controls.js'
-import { Model } from './model.js'
+import Model from './model.js'
 
 const { mat4 } = glMatrix
 

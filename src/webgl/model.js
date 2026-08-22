@@ -21,3 +21,5 @@ export class Model extends Scene{
         return model
     }
 }
+
+export default Model
