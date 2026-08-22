@@ -1,15 +1,17 @@
 import { Buffer } from './buffer.js'
+import Scene from './scene.js'
 
 const { mat4 } = glMatrix
 
-export class Mesh{
-    constructor(gl,shader){
+export class Mesh extends Scene{
+    /*constructor(gl,shader){
         this.gl = gl;
         this.shader = shader;
         this.meshMatrix = mat4.create()
-    }
+    }*/
     static async create(gl,shader,modelData){
         const mesh  = new Mesh(gl,shader)
+        mesh.shader = shader;
 
         mesh.geometry = modelData
 
@@ -19,7 +21,7 @@ export class Mesh{
 
         return mesh
     }
-    render(perspectiveMatrix,cameraMatrix,modelMatrix){
+    render(perspectiveMatrix,cameraMatrix,matrix){
         const {gl} = this
         /*======== Associating attributes to vertex shader =====*/
         var _Pmatrix = gl.getUniformLocation(this.shader.program, "Pmatrix");
@@ -40,7 +42,7 @@ export class Mesh{
 
 
         const finalMatrix = mat4.create();
-        mat4.multiply(finalMatrix, modelMatrix, this.meshMatrix);
+        mat4.multiply(finalMatrix, matrix, this.matrix);
 
 
 

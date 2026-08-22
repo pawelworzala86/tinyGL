@@ -25,9 +25,19 @@ export class Engine{
             const model = await Model.create(gl)
             model.rotateXm = Math.random()*0.0005
             model.rotateYm = Math.random()*0.0005
-            model.rotateX = Math.random()
-            model.rotateY = Math.random()
+            model.rotateX = (Math.random()-0.5)*30
+            model.rotateY = (Math.random()-0.5)*30
             model.position = [(Math.random()-0.5)*30,(Math.random()-0.5)*30,(Math.random()-0.5)*30,]
+
+            model.animate = function(delta){
+                model.rotateX += model.rotateXm*delta
+                model.rotateY += model.rotateYm*delta
+                mat4.identity(model.matrix)
+                mat4.translate(model.matrix, model.matrix, model.position)
+                mat4.rotateY(model.matrix,model.matrix,model.rotateX)
+                mat4.rotateX(model.matrix,model.matrix,model.rotateY)
+            }
+
             models.push(model)
         }
         
@@ -46,23 +56,8 @@ export class Engine{
 
         var time_old = 0;
 
-        var animate = function(time) {
-            var dt = time-time_old;
-
-            /*if (!controls.drag) {
-                controls.dX *= controls.AMORTIZATION
-                controls.dY*=controls.AMORTIZATION
-                controls.THETA+=controls.dX
-                controls.PHI+=controls.dY
-            }*/
-
-            //set model matrix to I4
-
-            //mat4.identity(model.mo_matrix)
-            //mat4.rotateY(model.mo_matrix,model.mo_matrix,controls.THETA)
-            //mat4.rotateX(model.mo_matrix,model.mo_matrix,controls.PHI)
-
-
+        const animate = function(time) {
+            const delta = time-time_old;
             time_old = time; 
 
             
@@ -79,12 +74,9 @@ export class Engine{
 
 
             for(const model of models){
-                model.rotateX += model.rotateXm*dt
-                model.rotateY += model.rotateYm*dt
-                mat4.identity(model.modelMatrix)
-                mat4.translate(model.modelMatrix, model.modelMatrix, model.position)
-                mat4.rotateY(model.modelMatrix,model.modelMatrix,model.rotateX)
-                mat4.rotateX(model.modelMatrix,model.modelMatrix,model.rotateY)
+                if(model.animate){
+                    model.animate(delta)
+                }
 
                 model.render(perspectiveMatrix,cameraMatrix)
             }
