@@ -34,12 +34,12 @@ export class Engine{
         
 
 
-        var proj_matrix = mat4.create()
-        mat4.perspectiveNO(proj_matrix, 45*Math.PI/180, canvas.width/canvas.height, 0.01, 1000)
+        var perspectiveMatrix = mat4.create()
+        mat4.perspectiveNO(perspectiveMatrix, 45*Math.PI/180, canvas.width/canvas.height, 0.01, 1000)
         //get_projection(40, canvas.width/canvas.height, 1, 100);
 
-        var view_matrix = mat4.create()
-        mat4.translate(view_matrix,view_matrix,[0,0,-50])
+        var cameraMatrix = mat4.create()
+        mat4.translate(cameraMatrix,cameraMatrix,[0,0,-50])
 
         
         //const controls = new Controls(gl,canvas)
@@ -81,12 +81,12 @@ export class Engine{
             for(const model of models){
                 model.rotateX += model.rotateXm*dt
                 model.rotateY += model.rotateYm*dt
-                mat4.identity(model.mo_matrix)
-                mat4.translate(model.mo_matrix, model.mo_matrix, model.position)
-                mat4.rotateY(model.mo_matrix,model.mo_matrix,model.rotateX)
-                mat4.rotateX(model.mo_matrix,model.mo_matrix,model.rotateY)
+                mat4.identity(model.modelMatrix)
+                mat4.translate(model.modelMatrix, model.modelMatrix, model.position)
+                mat4.rotateY(model.modelMatrix,model.modelMatrix,model.rotateX)
+                mat4.rotateX(model.modelMatrix,model.modelMatrix,model.rotateY)
 
-                model.render(proj_matrix,view_matrix)
+                model.render(perspectiveMatrix,cameraMatrix)
             }
 
             window.requestAnimationFrame(animate);

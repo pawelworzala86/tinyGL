@@ -1,10 +1,12 @@
-import { Shader } from './shader.js'
 import { Buffer } from './buffer.js'
+
+const { mat4 } = glMatrix
 
 export class Mesh{
     constructor(gl,shader){
         this.gl = gl;
         this.shader = shader;
+        this.meshMatrix = mat4.create()
     }
     static async create(gl,shader,modelData){
         const mesh  = new Mesh(gl,shader)
@@ -17,7 +19,7 @@ export class Mesh{
 
         return mesh
     }
-    render(proj_matrix,view_matrix,mo_matrix){
+    render(perspectiveMatrix,cameraMatrix,modelMatrix){
         const {gl} = this
         /*======== Associating attributes to vertex shader =====*/
         var _Pmatrix = gl.getUniformLocation(this.shader.program, "Pmatrix");
@@ -35,9 +37,16 @@ export class Mesh{
         gl.enableVertexAttribArray(_color);
         gl.useProgram(this.shader.program);
 
-        gl.uniformMatrix4fv(_Pmatrix, false, proj_matrix);
-        gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
-        gl.uniformMatrix4fv(_Mmatrix, false, mo_matrix);
+
+
+        const finalMatrix = mat4.create();
+        mat4.multiply(finalMatrix, modelMatrix, this.meshMatrix);
+
+
+
+        gl.uniformMatrix4fv(_Pmatrix, false, perspectiveMatrix);
+        gl.uniformMatrix4fv(_Vmatrix, false, cameraMatrix);
+        gl.uniformMatrix4fv(_Mmatrix, false, finalMatrix);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index_buffer);
         gl.drawElements(gl.TRIANGLES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);

@@ -8,7 +8,7 @@ export class Model{
     constructor(gl){
         this.gl = gl
         this.meshes = []
-        this.mo_matrix = mat4.create()
+        this.modelMatrix = mat4.create()
     }
     static async create(gl){
         const model = new Model(gl)
@@ -24,9 +24,9 @@ export class Model{
 
         return model
     }
-    render(proj_matrix,view_matrix){
+    render(perspectiveMatrix,cameraMatrix){
         for(const mesh of this.meshes){
-            mesh.render(proj_matrix,view_matrix,this.mo_matrix)
+            mesh.render(perspectiveMatrix,cameraMatrix,this.modelMatrix)
         }
     }
 }
