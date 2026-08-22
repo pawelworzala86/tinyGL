@@ -1,30 +1,4 @@
-//import { get } from "./../common.js"
-
-const defualtVert = `
-attribute vec3 position;
-
-uniform mat4 Pmatrix;
-uniform mat4 Vmatrix;
-uniform mat4 Mmatrix;
-
-attribute vec3 color;
-
-varying vec3 vColor;
-
-void main(void) {
-    gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);
-    vColor = color;
-}
-`
-const defualtFrag = `
-precision mediump float;
-
-varying vec3 vColor;
-
-void main(void) {
-    gl_FragColor = vec4(vec3(0.0,0.0,0.0), 1.);
-}
-`
+import { get } from "./../common.js"
 
 export class Shader{
     constructor(gl,program){
@@ -38,8 +12,8 @@ export class Shader{
         return shader
     }
     static async create(gl){
-        const vertCode = defualtVert//await get('./shaders/default.vert')
-        const fragCode = defualtFrag//await get('./shaders/default.frag')
+        const vertCode = await get('./shaders/default.vert')
+        const fragCode = await get('./shaders/default.frag')
 
         const vertShader = Shader.createShader(gl,gl.VERTEX_SHADER, vertCode)
         const fragShader = Shader.createShader(gl,gl.FRAGMENT_SHADER, fragCode)

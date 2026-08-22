@@ -40,6 +40,6 @@ export class Mesh{
         gl.uniformMatrix4fv(_Mmatrix, false, mo_matrix);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index_buffer);
-        gl.drawElements(gl.LINES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, this.geometry.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 }

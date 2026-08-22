@@ -7,7 +7,7 @@ export default {
   output: {
     file: 'dist/bundle.min.js',
     format: 'iife',
-    sourcemap: true
+    sourcemap: false
   },
   plugins: [
     resolve(),
